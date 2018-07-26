@@ -1,8 +1,5 @@
-# quake_report
+QUAKE REPORT
 
-A new Flutter application.
+flutter application using api from the usg earthquake feed.
 
-## Getting Started
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).

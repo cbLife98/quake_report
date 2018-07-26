@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+
 
 Map _data;
 List _features;
 void main() async {
   _data = await getJson();
   _features = _data['features'];
-  print(_features[0]['properties']['place']);
+
+
+
   runApp(new MaterialApp(
     title: "Quake Report",
     home: new Quake(),
@@ -29,13 +33,17 @@ class Quake extends StatelessWidget {
       ),
       body: new ListView.builder(
         itemCount: _features.length,
-        padding: const EdgeInsets.all(16.0),
+
         itemBuilder: (BuildContext context, int position) {
           if (position.isOdd) return new Divider();
           final index = position~/2;
+          DateTime date = new DateTime.fromMillisecondsSinceEpoch(_features[index]['properties']['time']);
+          var format = new DateFormat.yMMMMd("en_US").add_jm();
+          var dateString = format.format(date);
+
           return new ListTile(
             title: new Text(
-              "${_features[index]['properties']['place']}",
+              "$dateString",
               style: new TextStyle(
                   fontSize: 19.5,
                   fontWeight: FontWeight.w500,
@@ -63,7 +71,7 @@ class Quake extends StatelessWidget {
             ),
             onTap:() {_onTapMessage(
                 context,
-                "M ${_features[index]['properties']['mag']} - ${_features[position]['properties']['place']} ");
+                "M ${_features[index]['properties']['mag']} - ${_features[index]['properties']['place']} ");
             } ,
           );
         },
@@ -80,7 +88,7 @@ class Quake extends StatelessWidget {
             child: new Text("ok"))
       ],
     );
-    showDialog(context: context,child:  alert);
+    showDialog(context: context,builder:(_)=> alert);
   }
 }
 
